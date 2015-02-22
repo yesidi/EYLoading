@@ -4,6 +4,7 @@ EYLoading is a load view for a UIView (such as UIView, UIScrollView, UIImageView
 
 ##Features
 
+* Custom UIActivityIndicatorViewStyle.
 * Custom alert message.
 * Alert message will auto layout base on width of message text.
 
@@ -13,6 +14,12 @@ EYLoading is a load view for a UIView (such as UIView, UIScrollView, UIImageView
 ```c
 #import "UIView+EYLoding.h"
 ```
+* Set activityIndicatorViewStyle (default is UIActivityIndicatorViewStyleGray).
+
+```c
+self.view.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+```
+
 * Set alert text.
 
 ```c
@@ -22,7 +29,6 @@ self.view.alertText = @"loading...";
 * Start loading.
 
 ```c
-self.view.alertText = @"loading...";
 [self.view startLoading];
 ```
 
