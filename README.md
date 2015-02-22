@@ -4,9 +4,11 @@ EYLoading is a load view for a UIView (such as UIView, UIScrollView, UIImageView
 
 ##Exhibition
 
-![0](http://ww4.sinaimg.cn/bmiddle/b81043cdgw1epiq5wpe9kj20hs0vkq3q.jpg)
+![0](http://ww2.sinaimg.cn/bmiddle/b81043cdgw1epiqtdav8uj20hs0vkdgl.jpg)
 
 ![1](http://ww3.sinaimg.cn/bmiddle/b81043cdgw1epiq5vuw8nj20hs0vkgmt.jpg)
+
+![2](http://ww3.sinaimg.cn/bmiddle/b81043cdgw1epiq5vuw8nj20hs0vkgmt.jpg)
 
 ##Features
 
