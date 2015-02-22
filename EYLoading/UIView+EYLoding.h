@@ -11,6 +11,8 @@
 @interface UIView (EYLoding)
 @property(nonatomic, retain) NSString *alertText;
 @property(nonatomic, retain) UIView *loadView;
+@property(nonatomic) UIActivityIndicatorViewStyle activityIndicatorViewStyle;
+
 -(void)startLoading;
 -(void)stopLoading;
 @end

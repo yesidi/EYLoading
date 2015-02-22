@@ -16,10 +16,23 @@
 const void *EY_ALERT_TEXT_KEY = @"EYAlertTextKey";
 const void *EY_LOAD_VIEW_KEY = @"EYLoadViewKey";
 const void *EY_GAP_KEY = @"EYGapKey";
+const void *EY_INDICATOR_KEY = @"EYIndicatorKey";
+
 
 @implementation UIView (EYLoding)
 @dynamic alertText;
 @dynamic loadView;
+@dynamic activityIndicatorViewStyle;
+
+-(UIActivityIndicatorViewStyle)activityIndicatorViewStyle
+{
+    return [objc_getAssociatedObject(self, EY_INDICATOR_KEY) integerValue];
+}
+
+-(void)setActivityIndicatorViewStyle:(UIActivityIndicatorViewStyle)activityIndicatorViewStyle
+{
+    return objc_setAssociatedObject(self, EY_INDICATOR_KEY, [NSNumber numberWithInteger:activityIndicatorViewStyle], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
 
 -(NSString *)alertText
 {
@@ -49,7 +62,7 @@ const void *EY_GAP_KEY = @"EYGapKey";
         self.loadView.backgroundColor = [UIColor clearColor];
         
         //indicator
-        UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:self.activityIndicatorViewStyle];
         [indicator startAnimating];
         
         //alertText
