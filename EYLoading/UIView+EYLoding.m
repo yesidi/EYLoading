@@ -84,9 +84,10 @@ const void *EY_GAP_KEY = @"EYGapKey";
 -(void)stopLoading
 {
     [UIView animateWithDuration:DISAPEAR_DURATION animations:^{
-        self.loadView.alpha = 0.0;
+        self.loadView.alpha = 0.f;
     } completion:^(BOOL finished) {
         [self.loadView removeFromSuperview];
+        self.loadView.alpha = 1.f;
     }];
 }
 @end
