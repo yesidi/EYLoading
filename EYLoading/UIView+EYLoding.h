@@ -8,11 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIView (EYLoding)
-@property(nonatomic, retain) NSString *alertText;
-@property(nonatomic, retain) UIView *loadView;
+@interface LoadView : UIView
+@property(nonatomic, strong) UIActivityIndicatorView *indicator;
+@property(nonatomic, strong) UILabel *alertLabel;
 @property(nonatomic) UIActivityIndicatorViewStyle activityIndicatorViewStyle;
+- (id)initWithFrame:(CGRect)frame superView:(UIView *)superView alertText:(NSString *)alertMessage fixedY:(CGFloat)fixedY;
+@end
+
+@interface UIView (EYLoding)
+@property(nonatomic, strong) LoadView *loadView;
 
 -(void)startLoading;
+-(void)startLoadingWithScrollViewFixed:(BOOL)shouldFixed alertText:(NSString *)alertText;
 -(void)stopLoading;
 @end

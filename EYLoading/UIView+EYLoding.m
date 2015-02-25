@@ -11,38 +11,67 @@
 
 #define GAP 5
 #define ALERT_TEXT_WIDTH 200.f
-#define DISAPEAR_DURATION 0.5f
+#define DISAPEAR_DURATION 0.f
 
-const void *EY_ALERT_TEXT_KEY = @"EYAlertTextKey";
+@interface LoadView()
+@end
+
+@implementation LoadView
+@synthesize activityIndicatorViewStyle;
+@synthesize alertLabel;
+@synthesize indicator;
+
+- (id)initWithFrame:(CGRect)frame superView:(UIView *)superView alertText:(NSString *)alertMessage fixedY:(CGFloat)fixedY
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        // Initialization code
+        //loadView
+        self.backgroundColor = [UIColor clearColor];
+        
+        //indicator
+        if (!self.activityIndicatorViewStyle)
+            self.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+        self.indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:self.activityIndicatorViewStyle];
+        [self.indicator startAnimating];
+        
+        //alertText
+        self.alertLabel = [[UILabel alloc] init];
+        self.alertLabel.tag = 1;
+        self.alertLabel.text = alertMessage;
+        self.alertLabel.textColor = [UIColor lightGrayColor];
+        [self.alertLabel sizeToFit];
+
+        [self addSubview:self.indicator];
+        [self addSubview:self.alertLabel];
+        
+        [self layoutWithIndicator:indicator superView:superView fixedY:fixedY];
+    }
+    return self;
+}
+
+-(void)layoutWithIndicator:(UIActivityIndicatorView *)indicator superView:(UIView *)superView fixedY:(CGFloat)fixedY
+{
+    if (self.alertLabel.frame.size.width > ALERT_TEXT_WIDTH)
+    {
+        self.alertLabel.numberOfLines = (NSInteger)ceilf(self.alertLabel.frame.size.width/ALERT_TEXT_WIDTH);
+        self.alertLabel.frame = CGRectMake(0, 0, ALERT_TEXT_WIDTH, self.alertLabel.frame.size.width*(NSInteger)ceilf(self.alertLabel.frame.size.width/ALERT_TEXT_WIDTH));
+        [self.alertLabel sizeToFit];
+    }
+    
+    //layout
+    self.frame = CGRectMake(0, 0, self.indicator.frame.size.width + self.alertLabel.frame.size.width + GAP, MAX(self.indicator.frame.size.height, self.alertLabel.frame.size.height));
+    self.indicator.frame = CGRectMake(0, self.center.y-(self.indicator.frame.size.height/2), self.indicator.frame.size.width, self.indicator.frame.size.height);
+    self.alertLabel.frame = CGRectMake(self.indicator.frame.size.width + GAP, self.center.y-(self.alertLabel.frame.size.height/2), self.alertLabel.frame.size.width, self.alertLabel.frame.size.height);
+    
+    self.center = CGPointMake(superView.center.x, superView.center.y + fixedY);
+}
+@end
+
 const void *EY_LOAD_VIEW_KEY = @"EYLoadViewKey";
-const void *EY_GAP_KEY = @"EYGapKey";
-const void *EY_INDICATOR_KEY = @"EYIndicatorKey";
-
 
 @implementation UIView (EYLoding)
-@dynamic alertText;
 @dynamic loadView;
-@dynamic activityIndicatorViewStyle;
-
--(UIActivityIndicatorViewStyle)activityIndicatorViewStyle
-{
-    return [objc_getAssociatedObject(self, EY_INDICATOR_KEY) integerValue];
-}
-
--(void)setActivityIndicatorViewStyle:(UIActivityIndicatorViewStyle)activityIndicatorViewStyle
-{
-    return objc_setAssociatedObject(self, EY_INDICATOR_KEY, [NSNumber numberWithInteger:activityIndicatorViewStyle], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
--(NSString *)alertText
-{
-    return objc_getAssociatedObject(self, EY_ALERT_TEXT_KEY);
-}
-
--(void)setAlertText:(NSString *)alertText
-{
-    return objc_setAssociatedObject(self, EY_ALERT_TEXT_KEY, alertText, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
 
 -(UIView *)loadView
 {
@@ -56,42 +85,22 @@ const void *EY_INDICATOR_KEY = @"EYIndicatorKey";
 
 -(void)startLoading
 {
+    self.userInteractionEnabled = NO;
     if (!self.loadView) {
-        //loadView
-        self.loadView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-        self.loadView.backgroundColor = [UIColor clearColor];
-        
-        //indicator
-        UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:self.activityIndicatorViewStyle];
-        [indicator startAnimating];
-        
-        //alertText
-        UILabel *alertLabel = [[UILabel alloc] init];
-        alertLabel.text = self.alertText;
-        alertLabel.textColor = [UIColor lightGrayColor];
-        [alertLabel sizeToFit];
-        
-        if (alertLabel.frame.size.width > ALERT_TEXT_WIDTH)
-        {
-            alertLabel.numberOfLines = (NSInteger)ceilf(alertLabel.frame.size.width/ALERT_TEXT_WIDTH);
-            alertLabel.frame = CGRectMake(0, 0, ALERT_TEXT_WIDTH, alertLabel.frame.size.width*(NSInteger)ceilf(alertLabel.frame.size.width/ALERT_TEXT_WIDTH));
-            [alertLabel sizeToFit];
-        }
-        [self layoutWithIndicator:indicator alertLabel:alertLabel];
+        self.loadView = [[LoadView alloc] initWithFrame:CGRectMake(0, 0, 30, 30) superView:self alertText:@"" fixedY:0];
     }
     [self addSubview:self.loadView];
 }
 
--(void)layoutWithIndicator:(UIActivityIndicatorView *)indicator alertLabel:(UILabel *)alertLabel
+-(void)startLoadingWithScrollViewFixed:(BOOL)shouldFixed alertText:(NSString *)alertText
 {
-    //layout
-    self.loadView.frame = CGRectMake(0, 0, indicator.frame.size.width + alertLabel.frame.size.width + GAP, MAX(indicator.frame.size.height, alertLabel.frame.size.height));
-    indicator.frame = CGRectMake(0, self.loadView.center.y-(indicator.frame.size.height/2), indicator.frame.size.width, indicator.frame.size.height);
-    alertLabel.frame = CGRectMake(indicator.frame.size.width + GAP, self.loadView.center.y-(alertLabel.frame.size.height/2), alertLabel.frame.size.width, alertLabel.frame.size.height);
-    
-    [self.loadView addSubview:indicator];
-    [self.loadView addSubview:alertLabel];
-    self.loadView.center = self.center;
+    self.userInteractionEnabled = NO;
+    if (!self.loadView) {
+        self.loadView = [[LoadView alloc] initWithFrame:CGRectMake(0, 0, 30, 30) superView:self alertText:alertText fixedY:shouldFixed?(-44):0];
+    }
+    self.loadView.alertLabel.text = alertText;
+    [self.loadView layoutWithIndicator:self.loadView.indicator superView:self fixedY:shouldFixed?(-44):0];
+    [self addSubview:self.loadView];
 }
 
 -(void)stopLoading
@@ -100,7 +109,7 @@ const void *EY_INDICATOR_KEY = @"EYIndicatorKey";
         self.loadView.alpha = 0.f;
     } completion:^(BOOL finished) {
         [self.loadView removeFromSuperview];
-        self.loadView.alpha = 1.f;
+        self.userInteractionEnabled = YES;
     }];
 }
 @end
