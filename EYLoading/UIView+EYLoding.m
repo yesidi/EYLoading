@@ -21,18 +21,17 @@
 @synthesize alertLabel;
 @synthesize indicator;
 
-- (id)initWithFrame:(CGRect)frame superView:(UIView *)superView alertText:(NSString *)alertMessage fixedY:(CGFloat)fixedY
+- (id)initWithFrame:(CGRect)frame superView:(UIView *)superView alertText:(NSString *)alertMessage fixedY:(CGFloat)fixedY activityIndicatorViewStyle:(UIActivityIndicatorViewStyle)indicatorStyle
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
         //loadView
         self.backgroundColor = [UIColor clearColor];
         
         //indicator
-        if (!self.activityIndicatorViewStyle)
+        if (!indicatorStyle)
             self.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
-        self.indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:self.activityIndicatorViewStyle];
+        self.indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:indicatorStyle];
         [self.indicator startAnimating];
         
         //alertText
@@ -87,7 +86,7 @@ const void *EY_LOAD_VIEW_KEY = @"EYLoadViewKey";
 {
     self.userInteractionEnabled = NO;
     if (!self.loadView) {
-        self.loadView = [[LoadView alloc] initWithFrame:CGRectMake(0, 0, 30, 30) superView:self alertText:@"" fixedY:0];
+        self.loadView = [[LoadView alloc] initWithFrame:CGRectMake(0, 0, 30, 30) superView:self alertText:@"" fixedY:0 activityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
     }
     [self addSubview:self.loadView];
 }
@@ -96,7 +95,18 @@ const void *EY_LOAD_VIEW_KEY = @"EYLoadViewKey";
 {
     self.userInteractionEnabled = NO;
     if (!self.loadView) {
-        self.loadView = [[LoadView alloc] initWithFrame:CGRectMake(0, 0, 30, 30) superView:self alertText:alertText fixedY:shouldFixed?(-44):0];
+        self.loadView = [[LoadView alloc] initWithFrame:CGRectMake(0, 0, 30, 30) superView:self alertText:alertText fixedY:shouldFixed?(-44):0 activityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
+    }
+    self.loadView.alertLabel.text = alertText;
+    [self.loadView layoutWithIndicator:self.loadView.indicator superView:self fixedY:shouldFixed?(-44):0];
+    [self addSubview:self.loadView];
+}
+
+-(void)startLoadingWithScrollViewFixed:(BOOL)shouldFixed alertText:(NSString *)alertText activityIndicatorViewStyle:(UIActivityIndicatorViewStyle)indicatorStyle
+{
+    self.userInteractionEnabled = NO;
+    if (!self.loadView) {
+        self.loadView = [[LoadView alloc] initWithFrame:CGRectMake(0, 0, 30, 30) superView:self alertText:alertText fixedY:shouldFixed?(-44):0 activityIndicatorViewStyle:indicatorStyle];
     }
     self.loadView.alertLabel.text = alertText;
     [self.loadView layoutWithIndicator:self.loadView.indicator superView:self fixedY:shouldFixed?(-44):0];

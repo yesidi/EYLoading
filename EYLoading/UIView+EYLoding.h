@@ -12,7 +12,7 @@
 @property(nonatomic, strong) UIActivityIndicatorView *indicator;
 @property(nonatomic, strong) UILabel *alertLabel;
 @property(nonatomic) UIActivityIndicatorViewStyle activityIndicatorViewStyle;
-- (id)initWithFrame:(CGRect)frame superView:(UIView *)superView alertText:(NSString *)alertMessage fixedY:(CGFloat)fixedY;
+- (id)initWithFrame:(CGRect)frame superView:(UIView *)superView alertText:(NSString *)alertMessage fixedY:(CGFloat)fixedY activityIndicatorViewStyle:(UIActivityIndicatorViewStyle)indicatorStyle;
 @end
 
 @interface UIView (EYLoding)
@@ -20,5 +20,6 @@
 
 -(void)startLoading;
 -(void)startLoadingWithScrollViewFixed:(BOOL)shouldFixed alertText:(NSString *)alertText;
+-(void)startLoadingWithScrollViewFixed:(BOOL)shouldFixed alertText:(NSString *)alertText activityIndicatorViewStyle:(UIActivityIndicatorViewStyle)indicatorStyle;
 -(void)stopLoading;
 @end
