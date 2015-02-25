@@ -1,6 +1,6 @@
 ##What is EYLoading?
 
-EYLoading is a load view for a UIView (such as UIView, UIScrollView, UIImageView, UITableView, UICollectionView...) when your view is loading.
+EYLoading is a load view for a UIView (such as UIView, UIScrollView, UIWebView, UIImageView, UITableView, UICollectionView...) when your view is loading.
 
 ##Exhibition
 
