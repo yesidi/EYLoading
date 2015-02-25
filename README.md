@@ -13,6 +13,7 @@ EYLoading is a load view for a UIView (such as UIView, UIScrollView, UIImageView
 ##Features
 
 * Easy to Use.
+* It is perfect to apply kind of UIScrollView if your project need.
 * Custom UIActivityIndicatorViewStyle.
 * Custom alert message.
 * Alert message will auto layout base on width of message text.
